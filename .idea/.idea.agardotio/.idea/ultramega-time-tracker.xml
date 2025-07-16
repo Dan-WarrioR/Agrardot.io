@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="UltramegaTimeTracker">
+    <option name="idleTime" value="127745" />
+    <option name="todayTime" value="2387" />
+    <option name="todayDateTime" value="1752616800000" />
+    <option name="classTimeData">
+      <map>
+        <entry key="2025-07-16 10">
+          <value>
+            <map>
+              <entry key="PlayerTagComponent.cs" value="95" />
+            </map>
+          </value>
+        </entry>
+        <entry key="2025-07-16 11">
+          <value>
+            <map>
+              <entry key="Dependency.cs" value="9" />
+              <entry key="InputBridge.cs" value="12" />
+              <entry key="MovementSystem.cs" value="265" />
+              <entry key="PlayerAuthoring.cs" value="86" />
+              <entry key="PlayerControlSystem.cs" value="50" />
+              <entry key="PlayerInputComponent.cs" value="23" />
+              <entry key="PlayerInputSystem.cs" value="824" />
+              <entry key="PlayerInputSystem__System_7003262990.g.cs" value="2" />
+              <entry key="PlayerMovementComponent.cs" value="110" />
+              <entry key="PlayerTagComponent.cs" value="38" />
+            </map>
+          </value>
+        </entry>
+        <entry key="2025-07-16 12">
+          <value>
+            <map>
+              <entry key="MovementSystem.cs" value="2" />
+              <entry key="PlayerAuthoring.cs" value="10" />
+              <entry key="PlayerInputSystem.cs" value="132" />
+            </map>
+          </value>
+        </entry>
+        <entry key="2025-07-16 14">
+          <value>
+            <map>
+              <entry key="PlayerInputSystem.cs" value="675" />
+            </map>
+          </value>
+        </entry>
+        <entry key="2025-07-16 19">
+          <value>
+            <map>
+              <entry key="PlayerInputSystem.cs" value="53" />
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
