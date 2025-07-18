@@ -6,7 +6,7 @@ using Unity.Transforms;
 
 namespace ECS.Systems
 {
-    [UpdateInGroup(typeof(SimulationSystemGroup))]
+    [UpdateInGroup(typeof(GameplaySystemGroup))]
     public partial struct MovementSystem : ISystem
     {
         [BurstCompile]
