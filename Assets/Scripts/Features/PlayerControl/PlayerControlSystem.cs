@@ -1,8 +1,7 @@
-﻿using ECS.Components;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Entities;
 
-namespace ECS.Systems
+namespace Features.PlayerControl
 {
     [UpdateInGroup(typeof(SimulationSystemGroup))]
     [UpdateAfter(typeof(PlayerInputSystem))]

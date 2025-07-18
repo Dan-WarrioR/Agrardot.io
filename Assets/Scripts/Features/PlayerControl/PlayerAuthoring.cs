@@ -1,9 +1,8 @@
-﻿using ECS.Components;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace ECS.Systems
+namespace Features.PlayerControl
 {
     public class PlayerAuthoring : MonoBehaviour
     {

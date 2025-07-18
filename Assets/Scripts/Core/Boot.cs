@@ -5,7 +5,7 @@ using EditorAttributes;
 using Tools;
 using UnityEngine;
 
-namespace ECS.Systems
+namespace Core
 {
     public class Boot : MonoBehaviour
     {

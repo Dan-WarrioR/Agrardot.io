@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
-namespace ECS.Components
+namespace Features.PlayerControl
 {
     public struct PlayerInputComponent : IComponentData
     {

@@ -1,10 +1,10 @@
-﻿using ECS.Components;
+﻿using Features.PlayerControl;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace ECS.Systems
+namespace Features.PlayerControl
 {
     [UpdateInGroup(typeof(GameplaySystemGroup))]
     public partial struct MovementSystem : ISystem
