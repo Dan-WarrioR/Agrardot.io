@@ -1,7 +1,9 @@
-﻿namespace Core.HSM.States
+﻿using UnityEngine;
+
+namespace Core.HSM.States
 {
-    public class GameState
+    public class GameState : BaseState
     {
-        
+
     }
 }

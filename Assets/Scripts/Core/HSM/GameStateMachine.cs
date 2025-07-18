@@ -1,74 +1,180 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.HSM.States;
+using Tools;
 using UnityEngine;
 
 namespace Core.HSM
 {
-    public class GameStateMachine : MonoBehaviour
+    public class GameStateMachine : DependencyMonoBehaviour
     {
-        private readonly Dictionary<Type, BaseState> _stateCache = new();
-        private readonly Stack<BaseState> _stateStack = new();
+        #region Data
+        
+        public BaseState CurrentState => _states.Count > 0 ? _states.Peek() : null;
+        
+        private readonly Stack<BaseState> _states = new();
+        private readonly Queue<Action> _commands = new();
+        
+        #endregion
+        
+        //////////////////////////////////////////////////
+        
+        #region  Unity Life Cycle
 
-        public BaseState CurrentState => _stateStack.Count > 0 ? _stateStack.Peek() : null;
-
-        public void SetState<T>(T instance) where T : BaseState
+        private void OnEnable()
         {
-            InternalSetState(typeof(T), instance);
-        }
-
-        public void SetState<T>() where T : BaseState, new()
-        {
-            var type = typeof(T);
-
-            if (!_stateCache.TryGetValue(type, out var instance))
-            {
-                instance = new T();
-            }
-
-            InternalSetState(type, instance);
-        }
-
-        public void Update()
-        {
-            if (_stateStack.Count == 0)
+            if (_states.Count <= 0)
             {
                 return;
             }
 
-            CurrentState.OnExecute(Time.deltaTime);
-        }
-
-        public void Clear()
-        {
-            foreach (var state in _stateCache.Values)
-            {
-                state.OnDispose();
-            }
-
-            _stateCache.Clear();
-            _stateStack.Clear();
+            _states.Peek().enabled = true;
         }
         
-        private void InternalSetState(Type type, BaseState instance)
+        private void OnDisable()
         {
-            if (_stateStack.Count > 0 && CurrentState.GetType() == type)
+            if (_states.Count <= 0)
             {
                 return;
             }
 
-            if (_stateStack.Count > 0)
-            {
-                _stateStack.Pop().OnDispose();
-            }
-
-            if (!_stateCache.ContainsKey(type))
-            {
-                instance.Initialize(this);
-                _stateCache.Add(type, instance);
-            }
-
-            _stateStack.Push(instance);
+            _states.Peek().enabled = false;
         }
+
+        private void Update()
+        {
+            CurrentState?.Execute();
+        }
+
+        private void LateUpdate()
+        {
+            CurrentState?.ExecuteLate();
+            
+            while (_commands.Count > 0)
+            {
+                var command = _commands.Dequeue();
+                command?.Invoke();
+            }
+        }
+        
+        #endregion
+        
+        //////////////////////////////////////////////////
+        
+        #region Interface
+
+        public void SetState<T>(T state) where T : BaseState
+        {
+            if (CurrentState is T)
+            {
+                return;
+            }
+            
+            _commands.Enqueue(() => SetStateInternal(typeof(T)));
+        }
+
+        public void SetState(Type stateType)
+        {
+            if (CurrentState != null && CurrentState.GetType() == stateType)
+            {
+                return;
+            }
+            
+            _commands.Enqueue(() => SetStateInternal(stateType));
+        }
+
+        public void AddState<T>() where T : BaseState
+        {
+            _commands.Enqueue(() => AddStateInternal(typeof(T)));
+        }
+        
+        public void AddState(Type stateType)
+        {
+            if (CurrentState != null && CurrentState.GetType() == stateType)
+            {
+                return;
+            }
+            _commands.Enqueue(() => AddStateInternal(stateType));
+        }
+
+        public void PopCurrent()
+        {
+            _commands.Enqueue(PopCurrentState);
+        }
+        
+        #endregion
+
+        //////////////////////////////////////////////////
+        
+        #region Private Implementation
+
+        private void SetStateInternal(Type stateType)
+        {
+            if (HasClone(stateType))
+            {
+                return;
+            }
+
+            ClearAll();
+            InitializeState(stateType);
+        }
+
+        private void AddStateInternal(Type stateType)
+        {
+            if (HasClone(stateType))
+            {
+                return;
+            }
+            
+            if (_states.Count > 0)
+            {
+                _states.Peek().enabled = false;
+            }
+
+            InitializeState(stateType);
+        }
+
+        private void PopCurrentState()
+        {
+            var state = _states.Pop();
+            state.Dispose();
+        }
+
+        private bool HasClone(Type stateType)
+        {
+            foreach (var state in _states)
+            {
+                if (state.GetType() == stateType)
+                {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+
+        private void InitializeState(Type stateType)
+        {
+            var stateObject = new GameObject(stateType.Name);
+            stateObject.SetActive(false);
+            stateObject.transform.SetParent(transform);
+            var state = stateObject.AddComponent(stateType) as BaseState;
+            state.Initialize(this);
+            _states.Push(state);
+            stateObject.SetActive(true);
+        }
+
+        private void ClearAll()
+        {
+            while (_states.Count > 0)
+            {
+                var state = _states.Pop();
+                state.Dispose();
+            }
+            
+            _states.Clear();
+        }
+        
+        #endregion
     }
 }
