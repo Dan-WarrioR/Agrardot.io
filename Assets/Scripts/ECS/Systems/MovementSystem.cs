@@ -17,7 +17,7 @@ namespace ECS.Systems
             foreach (var (transform, movement)
                      in SystemAPI.Query<
                          RefRW<LocalTransform>,
-                         RefRO<PlayerMovementComponent>>())
+                         RefRO<MovementComponent>>())
             {
                 float2 direction = movement.ValueRO.direction;
                 float speed = movement.ValueRO.speed;

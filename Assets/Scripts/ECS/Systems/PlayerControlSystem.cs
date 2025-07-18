@@ -14,7 +14,7 @@ namespace ECS.Systems
             foreach (var (input, movement) 
                      in SystemAPI.Query<
                              RefRO<PlayerInputComponent>, 
-                             RefRW<PlayerMovementComponent>>()
+                             RefRW<MovementComponent>>()
                          .WithAll<PlayerTagComponent>())
             {
                 movement.ValueRW.direction = input.ValueRO.move;

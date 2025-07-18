@@ -7,7 +7,8 @@ namespace ECS.Systems
 {
     public class PlayerAuthoring : MonoBehaviour
     {
-        [SerializeField] private float moveSpeed = 5f;
+        [SerializeField] 
+        private float moveSpeed = 5f;
     
         private class PlayerBaker : Baker<PlayerAuthoring>
         {
@@ -17,7 +18,7 @@ namespace ECS.Systems
 
                 AddComponent<PlayerTagComponent>(entity);
                 AddComponent<PlayerInputComponent>(entity);
-                AddComponent(entity, new PlayerMovementComponent
+                AddComponent(entity, new MovementComponent
                 {
                     direction = float2.zero,
                     speed = authoring.moveSpeed

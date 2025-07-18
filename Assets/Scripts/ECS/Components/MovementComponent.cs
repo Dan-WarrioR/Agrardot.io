@@ -3,7 +3,7 @@ using Unity.Mathematics;
 
 namespace ECS.Components
 {
-    public struct PlayerMovementComponent : IComponentData
+    public struct MovementComponent : IComponentData
     {
         public float2 direction;
         public float speed;
