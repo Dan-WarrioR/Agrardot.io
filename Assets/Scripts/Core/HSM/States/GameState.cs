@@ -1,5 +1,5 @@
 ﻿using Features;
-using Unity.Entities;
+using Tools;
 
 namespace Core.HSM.States
 {
@@ -7,24 +7,12 @@ namespace Core.HSM.States
     {
         protected override void OnActivate()
         {
-            SwitchSystem<GameplaySystemGroup>(true);
+            DotsExtensions.SwitchSystem<GameplaySystemGroup>(true);                 
         }
 
         protected override void OnDeactivate()
         {
-            SwitchSystem<GameplaySystemGroup>(false);
-        }
-        
-        private void SwitchSystem<T>(bool isEnabled) where T : ComponentSystemBase
-        {
-            var world = World.DefaultGameObjectInjectionWorld;
-
-            if (world == null)
-            {
-                return;
-            }
-            
-            world.GetExistingSystemManaged<T>().Enabled = isEnabled;
+            DotsExtensions.SwitchSystem<GameplaySystemGroup>(false);
         }
     }
 }

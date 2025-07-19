@@ -1,6 +1,7 @@
 ﻿using System;
 using Core.HSM;
 using Core.HSM.States;
+using Data;
 using EditorAttributes;
 using Tools;
 using UnityEngine;
@@ -22,9 +23,13 @@ namespace Core
         private string coreScene = "Core";
         [SerializeField]
         private StartState startState;
+        [SerializeField]
+        private GlobalConfig globalConfig;
         
         private void Awake()
         {
+            Dependency.Register(globalConfig);
+            
             if (gameObject.scene.name.Equals(coreScene))
             {
                 Debug.LogError("Trying to load core twice!");
