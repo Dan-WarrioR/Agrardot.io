@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b616589f8cd44ed9ad3127de9200107, type: 3}
+  m_Name: GlobalConfig
+  m_EditorClassIdentifier: 
+  foodCount: 10
+  foodPrefab: {fileID: 3544382936084663624, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
+  playerCount: 1
+  playerPrefab: {fileID: 6943471421591900663, guid: a2a15b1ce42adb34e8875cba5d7bd5ed, type: 3}
+  mainPlayerPrefab: {fileID: 3834959309994041300, guid: 63b2cd0cf0138f447b616dded4e6cfab, type: 3}
