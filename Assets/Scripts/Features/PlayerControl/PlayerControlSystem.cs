@@ -1,10 +1,12 @@
-﻿using Unity.Burst;
+﻿using Features.Units.Food;
+using Unity.Burst;
 using Unity.Entities;
 
 namespace Features.PlayerControl
 {
-    [UpdateInGroup(typeof(SimulationSystemGroup))]
+    [UpdateInGroup(typeof(GameplaySystemGroup))]
     [UpdateAfter(typeof(PlayerInputSystem))]
+    [BurstCompile]
     public partial struct PlayerControlSystem : ISystem
     {
         [BurstCompile]
@@ -14,7 +16,7 @@ namespace Features.PlayerControl
                      in SystemAPI.Query<
                              RefRO<PlayerInputComponent>, 
                              RefRW<MovementComponent>>()
-                         .WithAll<PlayerTagComponent>())
+                         .WithAll<PlayerTag>())
             {
                 movement.ValueRW.direction = input.ValueRO.move;
             }

@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Features.Units.Food;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -27,7 +28,7 @@ namespace Features.PlayerControl
             float2 moveInput  = new(input.x, input.y);
         
             Entities
-                .WithAll<PlayerTagComponent>()
+                .WithAll<PlayerTag>()
                 .ForEach((ref PlayerInputComponent inputComponent) =>
                 {
                     inputComponent.move = moveInput;

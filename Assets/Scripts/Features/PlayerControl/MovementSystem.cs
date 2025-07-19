@@ -1,5 +1,4 @@
-﻿using Features.PlayerControl;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -7,6 +6,7 @@ using Unity.Transforms;
 namespace Features.PlayerControl
 {
     [UpdateInGroup(typeof(GameplaySystemGroup))]
+    [BurstCompile]
     public partial struct MovementSystem : ISystem
     {
         [BurstCompile]
