@@ -22,7 +22,7 @@ namespace Features.Spawn
 
             var config = SystemAPI.GetSingleton<FoodPrefabComponent>();
             var ecb = new EntityCommandBuffer(Allocator.Temp);
-            var random = new Random();
+            var random = new Random((uint)SystemAPI.Time.DeltaTime + 1);
             
             for (int i = 0; i < config.count; i++)
             {

@@ -1,4 +1,5 @@
-﻿using Unity.Burst;
+﻿using Features.Units.Player;
+using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
 
@@ -31,7 +32,7 @@ namespace Features.Units.Food
     
     [BurstCompile]
     [WithAll(typeof(FoodTag))]
-    [WithNone(typeof(PlayerTag), typeof(BotTag))]
+    [WithNone(typeof(UserTag), typeof(PlayerTag))]
     public partial struct RotateJob : IJobEntity
     {
         public float deltaTime;
