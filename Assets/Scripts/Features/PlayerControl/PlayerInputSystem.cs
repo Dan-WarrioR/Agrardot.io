@@ -1,4 +1,4 @@
-﻿using Features.Units.Food;
+﻿using Features.Units.Player;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -12,7 +12,7 @@ namespace Features.PlayerControl
         
         protected override void OnCreate()
         {
-            _inputMap = new InputMap();
+            _inputMap = new();
             _inputMap.Enable();
         }
 
@@ -24,15 +24,12 @@ namespace Features.PlayerControl
         
         protected override void OnUpdate()
         {
-            var input = _inputMap.Player.Move.ReadValue<Vector2>();
-            float2 moveInput  = new(input.x, input.y);
-        
-            Entities
-                .WithAll<PlayerTag>()
-                .ForEach((ref PlayerInputComponent inputComponent) =>
-                {
-                    inputComponent.move = moveInput;
-                }).Run();
+            var input = (float2)_inputMap.Player.Move.ReadValue<Vector2>();
+
+            foreach (var movement in SystemAPI.Query<RefRW<MovementComponent>>().WithAll<UserTag>())
+            {
+                movement.ValueRW.velocity = input;
+            }
         }
     }
 }

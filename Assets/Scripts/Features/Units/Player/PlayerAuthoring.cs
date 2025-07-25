@@ -1,47 +1,42 @@
-﻿using Features.PlayerControl;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Features.Units.Food
+namespace Features.Units.Player
 {
-    public struct PlayerTag : IComponentData
+    public struct UserTag : IComponentData
     {
 	    
     }
     
-    public struct BotTag : IComponentData
+    public struct PlayerTag : IComponentData
     {
         
     }
     
+    public struct MovementComponent : IComponentData
+    {
+        public float2 velocity;
+        public float speed;
+    }
+    
     public class PlayerAuthoring : MonoBehaviour
     {
-        [SerializeField] 
-        private bool isMainPlayer;
+        [SerializeField]
+        private float moveSpeed;
         
         private class PlayerAuthoringBaker : Baker<PlayerAuthoring>
         {
             public override void Bake(PlayerAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                AddComponent<FoodTag>(entity);
-
-                if (authoring.isMainPlayer)
-                {
-                    AddComponent<PlayerTag>(entity);
-                    AddComponent<PlayerInputComponent>(entity);
-                    
-                }
-                else
-                {
-                    AddComponent<BotTag>(entity);
-                }
+                AddComponent<PlayerTag>(entity);
+                AddComponent<UserTag>(entity);
                 
                 AddComponent(entity, new MovementComponent
                 {
-                    direction = float2.zero,
-                    speed = 5
+                    velocity = float2.zero,
+                    speed = authoring.moveSpeed,
                 });
             }
         }
