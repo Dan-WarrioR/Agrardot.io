@@ -12,6 +12,13 @@
 /[Uu]ser[Ss]ettings/
 *.log
 
+# Rider settings
+.idea/
+.idea/.idea.Log/
+.idea/workspace.xml
+.idea/tasks.xml
+*.DotSettings.user
+
 # By default unity supports Blender asset imports, *.blend1 blender files do not need to be commited to version control.
 *.blend1
 *.blend1.meta
