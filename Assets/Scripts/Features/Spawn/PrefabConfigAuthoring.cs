@@ -6,7 +6,7 @@ namespace Features.Spawn
     public struct FoodPrefabComponent : IComponentData
     {
         public Entity foodPrefab;
-        public int count;
+        public Entity playerPrefab;
     }
     
     public class PrefabConfigAuthoring : MonoBehaviour
@@ -14,17 +14,17 @@ namespace Features.Spawn
         [SerializeField]
         private GameObject foodPrefab;
         [SerializeField]
-        private int count = 100;
+        private GameObject playerPrefab;
         
         private class PrefabConfigAuthoringBaker : Baker<PrefabConfigAuthoring>
         {
             public override void Bake(PrefabConfigAuthoring authoring)
             {
-                var entity = GetEntity(TransformUsageFlags.None);
-                AddComponent(entity, new FoodPrefabComponent()
+                var foodEntity = GetEntity(TransformUsageFlags.None);
+                AddComponent(foodEntity, new FoodPrefabComponent()
                 {
                     foodPrefab = GetEntity(authoring.foodPrefab, TransformUsageFlags.Dynamic),
-                    count = authoring.count,
+                    playerPrefab = GetEntity(authoring.playerPrefab, TransformUsageFlags.Dynamic),
                 });
             }
         }

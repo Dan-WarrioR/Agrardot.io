@@ -17,10 +17,6 @@ namespace Data
     public class GlobalConfig : ScriptableObject
     {
         public int foodCount;
-        public GameObject foodPrefab;
-        
         public int playerCount;
-        public GameObject playerPrefab;
-        public GameObject mainPlayerPrefab;
     }
 }

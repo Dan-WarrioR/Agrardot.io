@@ -1,5 +1,5 @@
-﻿using Features.Units.Player;
-using Tools;
+﻿using Features.Spawn;
+using Features.Units.Player;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -8,26 +8,32 @@ using Unity.Transforms;
 
 namespace Features.Units.Food
 {
-    public readonly partial struct FoodAspect : IAspect
+    public readonly partial struct MassAspect  : IAspect
     {
-        public readonly Entity entity;
-        public readonly RefRO<LocalTransform> transform;
-        public readonly RefRW<RadiusComponent> radius;
-        public readonly RefRW<FoodComponent> food;
+        public readonly RefRW<FoodComponent> radius;
+        public readonly RefRW<LocalTransform> transform;
+        
+        public float Radius => radius.ValueRO.radius;
+        public float Mass => Radius * Radius * math.PI;
+        public LocalTransform Transform => transform.ValueRW;
+        
+        public void AddMass(float additionalMass)
+        {
+            float totalMass = Mass + additionalMass;
+            radius.ValueRW.radius = math.sqrt(totalMass / math.PI);
+            float scaleFactor = Radius / radius.ValueRO.baseFoodRadius;
+            transform.ValueRW.Scale = scaleFactor;
+        }
     }
     
     [BurstCompile]
     public partial struct FoodAbsorptionSystem : ISystem
     {
-        private const float GrowthBase = 2f;
-        private const float GrowthDecayRate = 0.5f;
-        private const float MinGrowthFactor = 1f;
-        
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<FoodTag>();
             state.RequireForUpdate<FoodComponent>();
-            state.RequireForUpdate<RadiusComponent>();
         }
         
         [BurstCompile]
@@ -35,49 +41,79 @@ namespace Features.Units.Food
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
-            DotsDebug.Log("Update");
+            int foodToRespawn = 0;
+            int playersToRespawn = 0;
             
-            foreach (var eater in SystemAPI.Query<FoodAspect>().WithAll<FoodComponent>().WithAll<PlayerTag>())
+            foreach (var (eaterAspect, eater) in SystemAPI
+                         .Query<MassAspect>()
+                         .WithAll<PlayerTag>()
+                         .WithEntityAccess())
             {
-                float2 eaterPos = new(eater.transform.ValueRO.Position.x, eater.transform.ValueRO.Position.z);
-                float eaterRadius = eater.radius.ValueRO.radius;
-                float totalMassGained = 0f;
+                float eaterRadius = eaterAspect.Radius;
+                float2 eaterPosition = new float2(eaterAspect.Transform.Position.x, eaterAspect.Transform.Position.y);
+                float addedMass = 0f;
 
-                foreach (var target in SystemAPI.Query<FoodAspect>())
+                foreach (var (foodAspect, food) in SystemAPI
+                             .Query<MassAspect>()
+                             .WithAll<FoodTag>()
+                             .WithNone<PlayerTag>()
+                             .WithEntityAccess())
                 {
-                    if (eater.entity == target.entity)
-                        continue;
-
-                    float2 targetPos = new float2(target.transform.ValueRO.Position.x, target.transform.ValueRO.Position.z);
-                    float targetRadius = target.radius.ValueRO.radius;
-
-                    float distance = math.distance(eaterPos, targetPos);
-                        
-                    bool canEat = eaterRadius > targetRadius;
-                    bool closeEnough = distance <= eaterRadius - targetRadius;
-
-                    DotsDebug.Log($"clsoeEnoguh: {closeEnough}: distance: {distance} and can eat: {canEat}");
-                    
-                    if (canEat && closeEnough)
+                    if (eater == food)
                     {
-                        totalMassGained += target.food.ValueRO.mass;
-                        ecb.DestroyEntity(target.entity);
+                        continue;
+                    }
+
+                    float foodRadius = foodAspect.Radius;
+                    float2 foodPosition = new float2(foodAspect.Transform.Position.x, foodAspect.Transform.Position.y);
+
+                    float2 offset = foodPosition - eaterPosition;
+                    float distanceSq = math.lengthsq(offset);
+
+                    float requiredDistance = eaterRadius - foodRadius;
+
+                    if (requiredDistance <= 0f || distanceSq > requiredDistance * requiredDistance)
+                    {
+                        continue;
+                    }
+
+                    addedMass += foodAspect.Mass;
+                    ecb.DestroyEntity(food);
+                    
+                    if (SystemAPI.HasComponent<PlayerTag>(food))
+                    {
+                        playersToRespawn++;
+                    }
+                    else
+                    {
+                        foodToRespawn++;
                     }
                 }
                 
-                if (totalMassGained > 0)
+                if (addedMass > 0f)
                 {
-                    float currentMass = eater.food.ValueRO.mass;
-                
-                    float growthFactor = GrowthBase / (1f + GrowthDecayRate * math.log(currentMass + 1));
-                    growthFactor = math.max(growthFactor, MinGrowthFactor);
-                
-                    float newMass = currentMass + totalMassGained * growthFactor;
-                    float newRadius = math.sqrt(newMass / math.PI);
-                
-                    eater.food.ValueRW.mass = newMass;
-                    eater.radius.ValueRW.radius = newRadius;
+                    eaterAspect.AddMass(addedMass);
                 }
+            }
+            
+            if (foodToRespawn > 0)
+            {
+                var foodRequest = ecb.CreateEntity();
+                ecb.AddComponent(foodRequest, new SpawnRequest
+                {
+                    type = SpawnRequestType.Food,
+                    count = foodToRespawn,
+                });
+            }
+
+            if (playersToRespawn > 0)
+            {
+                var playerRequest = ecb.CreateEntity();
+                ecb.AddComponent(playerRequest, new SpawnRequest
+                {
+                    type = SpawnRequestType.Player,
+                    count = playersToRespawn,
+                });
             }
 
             ecb.Playback(state.EntityManager);

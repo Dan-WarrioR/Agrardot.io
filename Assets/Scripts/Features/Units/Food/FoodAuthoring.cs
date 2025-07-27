@@ -5,12 +5,8 @@ namespace Features.Units.Food
 {
     public struct FoodComponent : IComponentData
     {
-        public float mass;
-    }
-    
-    public struct RadiusComponent : IComponentData
-    {
         public float radius;
+        public float baseFoodRadius;
     }
     
     public struct FoodTag : IComponentData
@@ -21,23 +17,23 @@ namespace Features.Units.Food
     public class FoodAuthoring : MonoBehaviour
     {
         [SerializeField]
-        private float initialMass = 1f;
-        [SerializeField]
         private float initialRadius = 1f;
         
         private class FoodAuthoringBaker : Baker<FoodAuthoring>
         {
             public override void Bake(FoodAuthoring authoring)
             {
+                var renderer = authoring.GetComponent<SpriteRenderer>();
+                float spriteWorldRadius = renderer.bounds.extents.magnitude;
+                float scaleFactor = authoring.initialRadius / spriteWorldRadius;
+                authoring.transform.localScale = scaleFactor * Vector3.one;
+                
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent<FoodTag>(entity);
                 AddComponent(entity, new FoodComponent
                 {
-                    mass = authoring.initialMass,
-                });
-                AddComponent(entity, new RadiusComponent
-                {
                     radius = authoring.initialRadius,
+                    baseFoodRadius = spriteWorldRadius,
                 });
             }
         }
