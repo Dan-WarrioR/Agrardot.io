@@ -2,6 +2,7 @@
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
+using Unity.Transforms;
 
 namespace Features.Units.Player
 {
@@ -10,13 +11,15 @@ namespace Features.Units.Player
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (velocity, movement) 
+            foreach (var (transform, movement) 
                      in SystemAPI.Query<
-                         RefRW<PhysicsVelocity>, 
+                         RefRW<LocalTransform>, 
                          RefRO<MovementComponent>>())
             {
-                var moveStep = movement.ValueRO.velocity * movement.ValueRO.speed;
-                velocity.ValueRW.Linear = new float3(moveStep.x, moveStep.y, 0f);
+                float2 direction = movement.ValueRO.velocity;
+                float3 delta = new float3(direction.x, direction.y, 0) * movement.ValueRO.speed * SystemAPI.Time.DeltaTime;
+                
+                transform.ValueRW.Position += delta;
             }
         }
     }
