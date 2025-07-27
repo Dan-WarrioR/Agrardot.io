@@ -5,7 +5,8 @@ namespace Data
 {
     public struct FoodSpawnConfigComponent : IComponentData
     {
-        public float initialRadius;
+        public float foodRadius;
+        public float playerRadius;
     }
     
     public class FoodConfigAuthoring : MonoBehaviour
@@ -20,7 +21,8 @@ namespace Data
                 var entity = GetEntity(TransformUsageFlags.None);
                 AddComponent(entity, new FoodSpawnConfigComponent
                 {
-                    initialRadius = authoring.config.initialRadius
+                    foodRadius = authoring.config.initialRadius,
+                    playerRadius = authoring.config.playerRadius,
                 });
             }
         }

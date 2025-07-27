@@ -57,7 +57,7 @@ namespace Features.Spawn
                     ecb.SetComponent(instance, LocalTransform.FromPosition(position));
                     ecb.SetComponent(instance, new FoodComponent()
                     {
-                        radius = spawnConfig.initialRadius,
+                        radius = GetInitialRadius(request.ValueRO.type, spawnConfig),
                     });
                 }
                 
@@ -75,6 +75,16 @@ namespace Features.Spawn
                 SpawnRequestType.Food => config.foodPrefab,
                 SpawnRequestType.Player => config.playerPrefab,
                 _ => Entity.Null,
+            };
+        }
+
+        private float GetInitialRadius(SpawnRequestType type, FoodSpawnConfigComponent config)
+        {
+            return type switch 
+            {
+                SpawnRequestType.Food => config.foodRadius,
+                SpawnRequestType.Player => config.playerRadius,
+                _ => 0f,
             };
         }
     }

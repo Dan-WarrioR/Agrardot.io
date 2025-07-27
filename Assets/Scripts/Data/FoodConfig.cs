@@ -6,5 +6,6 @@ namespace Data
     public class FoodConfig : ScriptableObject
     {
         public float initialRadius = 1f;
+        public float playerRadius = 2f;
     }
 }
