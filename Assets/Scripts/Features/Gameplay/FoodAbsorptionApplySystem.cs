@@ -66,10 +66,12 @@ namespace Features.Gameplay
                 var playerRequest = ecb.CreateEntity();
                 ecb.AddComponent(playerRequest, new SpawnRequest
                 {
-                    type = SpawnRequestType.Player,
+                    type = SpawnRequestType.PlayerBot,
                     count = playersToRespawn,
                 });
             }
+            
+            //duplicate logic to check user dead and respawn - TODO: rewrite as respawnSystem
 
             ecb.Playback(state.EntityManager);
             ecb.Dispose();

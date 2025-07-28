@@ -38,8 +38,7 @@ namespace Features.Gameplay
 
                 foreach (var foodAspect in SystemAPI
                              .Query<MassAspect>()
-                             .WithAll<FoodTag>()
-                             .WithNone<PlayerTag>()) //eat players?
+                             .WithAll<FoodTag>())
                 {
                     if (eaterAspect.entity == foodAspect.entity)
                     {

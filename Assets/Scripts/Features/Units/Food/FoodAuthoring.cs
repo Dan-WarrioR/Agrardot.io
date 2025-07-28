@@ -3,10 +3,14 @@ using UnityEngine;
 
 namespace Features.Units.Food
 {
+    public struct MassChangedTag : IComponentData, IEnableableComponent
+    {
+        
+    }
+    
     public struct FoodComponent : IComponentData
     {
         public float radius;
-        public float baseFoodRadius;
     }
     
     public struct FoodTag : IComponentData
@@ -19,21 +23,27 @@ namespace Features.Units.Food
         [SerializeField]
         private float initialRadius = 1f;
         
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                transform.localScale = Vector3.one * initialRadius;
+            }
+        }
+#endif
+        
         private class FoodAuthoringBaker : Baker<FoodAuthoring>
         {
             public override void Bake(FoodAuthoring authoring)
             {
-                var renderer = authoring.GetComponent<SpriteRenderer>();
-                float spriteWorldRadius = renderer.bounds.extents.magnitude;
-                float scaleFactor = authoring.initialRadius / spriteWorldRadius;
-                authoring.transform.localScale = scaleFactor * Vector3.one;
-                
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent<FoodTag>(entity);
+                AddComponent<MassChangedTag>(entity);
+                SetComponentEnabled<MassChangedTag>(entity, false);
                 AddComponent(entity, new FoodComponent
                 {
                     radius = authoring.initialRadius,
-                    baseFoodRadius = spriteWorldRadius,
                 });
             }
         }
