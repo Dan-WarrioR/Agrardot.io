@@ -26,21 +26,28 @@ namespace Core.HSM.States
 
         private void SpawnEntities(GlobalConfig globalConfig)
         {
-            var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-
-            var foodRequest = entityManager.CreateEntity();
-            entityManager.AddComponentData(foodRequest, new SpawnRequest
+            SpawnEntity(new SpawnRequest
             {
                 type = SpawnRequestType.Food,
                 count = globalConfig.foodCount,
             });
-
-            var playerRequest = entityManager.CreateEntity();
-            entityManager.AddComponentData(playerRequest, new SpawnRequest
+            SpawnEntity(new SpawnRequest
             {
-                type = SpawnRequestType.Player,
-                count = globalConfig.playerCount,
+                type = SpawnRequestType.PlayerUser,
+                count = 1,
             });
+            SpawnEntity(new SpawnRequest
+            {
+                type = SpawnRequestType.PlayerBot,
+                count = globalConfig.playerCount - 1,
+            });
+        }
+
+        private void SpawnEntity<T>(T request) where T : unmanaged, IComponentData
+        {
+            var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            var entity = manager.CreateEntity();
+            manager.AddComponentData(entity, request);
         }
     }
 }

@@ -6,7 +6,8 @@ namespace Features.Spawn
     public struct FoodPrefabComponent : IComponentData
     {
         public Entity foodPrefab;
-        public Entity playerPrefab;
+        public Entity botPrefab;
+        public Entity userPrefab;
     }
     
     public class PrefabConfigAuthoring : MonoBehaviour
@@ -14,7 +15,9 @@ namespace Features.Spawn
         [SerializeField]
         private GameObject foodPrefab;
         [SerializeField]
-        private GameObject playerPrefab;
+        private GameObject botPrefab;
+        [SerializeField]
+        private GameObject userPrefab;
         
         private class PrefabConfigAuthoringBaker : Baker<PrefabConfigAuthoring>
         {
@@ -24,7 +27,8 @@ namespace Features.Spawn
                 AddComponent(foodEntity, new FoodPrefabComponent()
                 {
                     foodPrefab = GetEntity(authoring.foodPrefab, TransformUsageFlags.Dynamic),
-                    playerPrefab = GetEntity(authoring.playerPrefab, TransformUsageFlags.Dynamic),
+                    botPrefab = GetEntity(authoring.botPrefab, TransformUsageFlags.Dynamic),
+                    userPrefab = GetEntity(authoring.userPrefab, TransformUsageFlags.Dynamic),
                 });
             }
         }
