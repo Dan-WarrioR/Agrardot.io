@@ -1,4 +1,5 @@
 ﻿using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Data
@@ -6,11 +7,10 @@ namespace Data
     public struct GlobalConfigComponent : IComponentData
     {
         public int foodCount;
-        public Entity foodPrefab;
-
         public int playerCount;
-        public Entity playerPrefab;
-        public Entity mainPlayerPrefab;
+
+        public float2 mapMin;
+        public float2 mapMax;
     }
     
     [CreateAssetMenu(menuName = "Configs/GlobalConfig", order = 0)]
@@ -18,5 +18,8 @@ namespace Data
     {
         public int foodCount;
         public int playerCount;
+        
+        public Vector2 mapMin = new(-50, -50);
+        public Vector2 mapMax = new(50, 50);
     }
 }

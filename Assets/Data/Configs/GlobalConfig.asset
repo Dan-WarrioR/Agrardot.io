@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b616589f8cd44ed9ad3127de9200107, type: 3}
   m_Name: GlobalConfig
   m_EditorClassIdentifier: 
-  foodCount: 10
-  foodPrefab: {fileID: 3544382936084663624, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
-  playerCount: 1
-  playerPrefab: {fileID: 6943471421591900663, guid: a2a15b1ce42adb34e8875cba5d7bd5ed, type: 3}
-  mainPlayerPrefab: {fileID: 3834959309994041300, guid: 63b2cd0cf0138f447b616dded4e6cfab, type: 3}
+  foodCount: 1000
+  playerCount: 2
+  mapMin: {x: -50, y: -50}
+  mapMax: {x: 50, y: 50}

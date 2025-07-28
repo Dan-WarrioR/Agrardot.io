@@ -14,15 +14,13 @@ namespace Data
             {
                 var entity = GetEntity(TransformUsageFlags.None);
                 var config = authoring.config;
-                // AddComponent(entity, new GlobalConfigComponent
-                // {
-                //     foodPrefab = GetEntity(config.foodPrefab, TransformUsageFlags.Dynamic),
-                //     foodCount = config.foodCount,
-                //
-                //     playerPrefab = GetEntity(config.playerPrefab, TransformUsageFlags.Dynamic),
-                //     mainPlayerPrefab = GetEntity(config.mainPlayerPrefab, TransformUsageFlags.Dynamic),
-                //     playerCount = config.playerCount,
-                // });
+                AddComponent(entity, new GlobalConfigComponent
+                {
+                    foodCount = config.foodCount,
+                    playerCount = config.playerCount,
+                    mapMin = config.mapMin,
+                    mapMax = config.mapMax,
+                });
             }
         }
     }
