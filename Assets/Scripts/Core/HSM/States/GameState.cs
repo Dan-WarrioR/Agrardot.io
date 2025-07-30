@@ -14,10 +14,6 @@ namespace Core.HSM.States
         
         protected override void OnDispose()
         {
-            var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            var gameQuery = manager.CreateEntityQuery(typeof(GameEntityTag));
-            manager.DestroyEntity(gameQuery);
-            
             SceneLoader.UnloadScene(GameSceneName);
             DotsExtensions.SwitchSystem<GameplaySystemGroup>(false);
         }
