@@ -42,7 +42,7 @@ namespace Features.Gameplay
 
         public void Resize()
         {
-            transform.ValueRW.Scale = Radius;
+            transform.ValueRW.Scale = Radius * 2f;
         }
     }
 }

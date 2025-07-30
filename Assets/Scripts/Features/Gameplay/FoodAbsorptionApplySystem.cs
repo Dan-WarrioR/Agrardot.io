@@ -28,6 +28,7 @@ namespace Features.Gameplay
             
             int foodToRespawn = 0;
             int playersToRespawn = 0;
+            int usersToRespawn = 0;
 
             foreach (var (absorptionEvent, entity) in SystemAPI
                 .Query<RefRO<AbsorptionEvent>>()
@@ -43,40 +44,48 @@ namespace Features.Gameplay
                 ecb.DestroyEntity(targetEntity);
                 ecb.DestroyEntity(entity);
                 
-                if (SystemAPI.HasComponent<FoodTag>(targetEntity))
+                if (SystemAPI.HasComponent<UserTag>(targetEntity))
                 {
-                    foodToRespawn++;
+                    usersToRespawn++;
                 }
                 else if (SystemAPI.HasComponent<PlayerTag>(targetEntity))
                 {
                     playersToRespawn++;
                 }
+                else
+                {
+                    foodToRespawn++;
+                }
             }
             
             if (foodToRespawn > 0)
             {
-                var foodRequest = ecb.CreateEntity();
-                ecb.AddComponent(foodRequest, new SpawnRequest
-                {
-                    type = SpawnRequestType.Food,
-                    count = foodToRespawn,
-                    time = config.foodRespawnDelay + SystemAPI.Time.ElapsedTime,
-                });
+                CreateSpawnRequest(ref ecb, SpawnRequestType.Food, foodToRespawn, config.foodRespawnDelay + SystemAPI.Time.ElapsedTime);
             }
 
             if (playersToRespawn > 0)
             {
-                var playerRequest = ecb.CreateEntity();
-                ecb.AddComponent(playerRequest, new SpawnRequest
-                {
-                    type = SpawnRequestType.Player,
-                    count = playersToRespawn,
-                    time = config.playerRespawnDelay + SystemAPI.Time.ElapsedTime,
-                });
+                CreateSpawnRequest(ref ecb, SpawnRequestType.Player, playersToRespawn, config.playerRespawnDelay + SystemAPI.Time.ElapsedTime);
+            }
+
+            if (usersToRespawn > 0)
+            {
+                CreateSpawnRequest(ref ecb, SpawnRequestType.User, usersToRespawn, config.playerRespawnDelay + SystemAPI.Time.ElapsedTime);
             }
             
             ecb.Playback(state.EntityManager);
             ecb.Dispose();
+        }
+        
+        private static void CreateSpawnRequest(ref EntityCommandBuffer ecb, SpawnRequestType type, int count, double time)
+        {
+            var entity = ecb.CreateEntity();
+            ecb.AddComponent(entity, new SpawnRequest
+            {
+                type = type,
+                count = count,
+                time = time,
+            });
         }
     }
 }
