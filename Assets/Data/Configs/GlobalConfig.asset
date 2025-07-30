@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b616589f8cd44ed9ad3127de9200107, type: 3}
   m_Name: GlobalConfig
   m_EditorClassIdentifier: 
-  foodCount: 1000
-  playerCount: 2
-  mapMin: {x: -50, y: -50}
-  mapMax: {x: 50, y: 50}
+  randomSeed: 186
+  mapMin: {x: -10, y: -10}
+  mapMax: {x: 10, y: 10}
+  foodCount: 5
+  playerCount: 1
+  foodRespawnDelay: 5
+  playerRespawnDelay: 5
