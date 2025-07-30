@@ -28,8 +28,6 @@ namespace Core
         
         private void Awake()
         {
-            Dependency.Register(globalConfig);
-            
             if (gameObject.scene.name.Equals(coreScene))
             {
                 Debug.LogError("Trying to load core twice!");
@@ -41,6 +39,7 @@ namespace Core
                 return;
             }
                 
+            Dependency.Register(globalConfig);
             IsPreloaded = true;
             SceneLoader.LoadScene(coreScene, () =>
             {

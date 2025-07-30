@@ -63,7 +63,7 @@ namespace Core.HSM
         
         #region Interface
 
-        public void SetState<T>(T state) where T : BaseState
+        public void SetState<T>() where T : BaseState
         {
             if (CurrentState is T)
             {
