@@ -8,23 +8,18 @@ namespace Features.PlayerControl
     [UpdateInGroup(typeof(InitializationSystemGroup))]
     public partial class PlayerInputSystem : SystemBase
     {
-        private InputMap _inputMap;
+        private InputBridge InputBridge => _inputBridge ??= Tools.Dependency.Get<InputBridge>();
+        private InputBridge _inputBridge;
         
         protected override void OnCreate()
         {
-            _inputMap = new();
-            _inputMap.Enable();
+            RequireForUpdate<PlayerTag>();
+            RequireForUpdate<MovementComponent>();
         }
 
-        protected override void OnDestroy()
-        {
-            _inputMap?.Disable();
-            _inputMap?.Dispose();
-        }
-        
         protected override void OnUpdate()
         {
-            var input = (float2)_inputMap.Player.Move.ReadValue<Vector2>();
+            var input = (float2)InputBridge.InputMap.Player.Move.ReadValue<Vector2>();
 
             foreach (var movement in SystemAPI.Query<RefRW<MovementComponent>>().WithAll<UserTag>())
             {
