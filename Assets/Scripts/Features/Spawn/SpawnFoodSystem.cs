@@ -1,25 +1,27 @@
 ﻿using Data;
 using Features.Units.Food;
+using Tools;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using Random = Unity.Mathematics.Random;
+using UnityEngine;
 
 namespace Features.Spawn
 {
     public enum SpawnRequestType : byte
     {
         Food,
-        PlayerBot,
-        PlayerUser,
+        Player,
+        User,
     }
     
     public struct SpawnRequest : IComponentData
     {
         public SpawnRequestType type;
         public int count;
+        public double time;
     }
     
     [UpdateInGroup(typeof(GameplaySystemGroup))]
@@ -36,29 +38,28 @@ namespace Features.Spawn
         public void OnUpdate(ref SystemState state)
         {
             var prefabConfig = SystemAPI.GetSingleton<FoodPrefabComponent>();
-            var config = SystemAPI.GetSingleton<GlobalConfigComponent>();
+            var config = SystemAPI.GetSingletonRW<GlobalConfigComponent>();
             
             var ecb = new EntityCommandBuffer(Allocator.Temp);
-            var random = new Random((uint)SystemAPI.Time.DeltaTime + 1);
+            var now = SystemAPI.Time.ElapsedTime;
 
             foreach (var (request, requestEntity) in SystemAPI
                          .Query<RefRO<SpawnRequest>>()
                          .WithEntityAccess())
             {
+                if (request.ValueRO.time > now)
+                {
+                    continue;
+                }
+                
                 for (int i = 0; i < request.ValueRO.count; i++)
                 {
                     var prefab = GetEntityPrefab(request.ValueRO.type, prefabConfig);
                     var instance = ecb.Instantiate(prefab);
-                    
-                    float x = random.NextFloat(config.mapMin.x, config.mapMax.x);
-                    float y = random.NextFloat(config.mapMin.y, config.mapMax.y);
-                    float3 position = new float3(x, y, 0f);
-                    
                     var foodComponent = state.EntityManager.GetComponentData<FoodComponent>(prefab);
-
                     var transform = new LocalTransform
                     {
-                        Position = position,
+                        Position = GetRandomPosition(config),
                         Rotation = quaternion.identity,
                         Scale = foodComponent.radius,
                     };
@@ -78,10 +79,17 @@ namespace Features.Spawn
             return type switch 
             {
                 SpawnRequestType.Food => config.foodPrefab,
-                SpawnRequestType.PlayerBot => config.botPrefab,
-                SpawnRequestType.PlayerUser => config.userPrefab,
+                SpawnRequestType.Player => config.botPrefab,
+                SpawnRequestType.User => config.userPrefab,
                 _ => Entity.Null,
             };
+        }
+//
+        private float3 GetRandomPosition(RefRW<GlobalConfigComponent> config)
+        {
+            float x = config.ValueRW.random.NextFloat(config.ValueRO.mapMin.x, config.ValueRO.mapMax.x);
+            float y = config.ValueRW.random.NextFloat(config.ValueRO.mapMin.y, config.ValueRO.mapMax.y);
+            return new float3(x, y, 0f);
         }
     }
 }

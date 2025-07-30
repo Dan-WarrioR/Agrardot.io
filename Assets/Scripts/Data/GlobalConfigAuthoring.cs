@@ -20,6 +20,9 @@ namespace Data
                     playerCount = config.playerCount,
                     mapMin = config.mapMin,
                     mapMax = config.mapMax,
+                    random = new(config.randomSeed),
+                    foodRespawnDelay = config.foodRespawnDelay,
+                    playerRespawnDelay = config.playerRespawnDelay,
                 });
             }
         }
