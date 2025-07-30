@@ -200,6 +200,10 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: -500}
   lerpSpeed: 5
   followThreshold: 1.5
+  zoomMultiplier: 1.5
+  minZoom: 50
+  maxZoom: 250
+  zoomLerpSpeed: 1.5
 --- !u!1 &1143438116
 GameObject:
   m_ObjectHideFlags: 0

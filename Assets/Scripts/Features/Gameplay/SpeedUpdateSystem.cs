@@ -10,7 +10,7 @@ namespace Features.Gameplay
     [UpdateInGroup(typeof(GameplaySystemGroup))]
     public partial struct SpeedUpdateSystem : ISystem
     {
-        private const float SpeedReductionCoefficient = 1f;
+        private const float SpeedReductionCoefficient = 0.1f;
         private const float MinSpeed = 0.1f;
         
         [BurstCompile]

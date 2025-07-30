@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: GlobalConfig
   m_EditorClassIdentifier: 
   randomSeed: 186
-  mapMin: {x: -100, y: -100}
-  mapMax: {x: 100, y: 100}
-  foodCount: 1000
-  playerCount: 10
+  mapMin: {x: -500, y: -500}
+  mapMax: {x: 500, y: 500}
+  foodCount: 10000
+  playerCount: 100
   foodRespawnDelay: 5
   playerRespawnDelay: 5

@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1984094340794852805, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1984094340794852805, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1984094340794852805, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1984094340794852805, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2031014331018890248, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
       propertyPath: initialRadius
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3544382936084663624, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
       propertyPath: m_Name
@@ -97,5 +97,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a830619df3343fcbb541e0c01b95a66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 20
+  moveSpeed: 30
   isUser: 0

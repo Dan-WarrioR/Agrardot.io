@@ -1,4 +1,5 @@
-﻿using Features.Units.Player;
+﻿using Features.Gameplay;
+using Features.Units.Player;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -17,37 +18,22 @@ namespace Features.Control.Camera
         
         protected override void OnUpdate()
         {
-            if (!SystemAPI.HasSingleton<UserTag>() 
-                || !SystemAPI.HasSingleton<CameraSettingsComponent>())
-            {
-                return;
-            }
-
-            var camera = UnityEngine.Camera.main.transform;
+            var camera = UnityEngine.Camera.main;
+            var cameraTransform = camera.transform;
             var config = SystemAPI.GetSingleton<CameraSettingsComponent>();
-
             var playerEntity = SystemAPI.GetSingletonEntity<UserTag>();
+
             var playerTransform = SystemAPI.GetComponentRO<LocalToWorld>(playerEntity).ValueRO;
-            
-            float3 desiredPosition = playerTransform.Position + config.offset;
-            float3 cameraPosition = camera.position;
+            var playerMass = SystemAPI.GetAspect<MassAspect>(playerEntity);
 
-            float distanceToPlayer = math.distance(cameraPosition, desiredPosition);
+            float3 targetPosition = playerTransform.Position + config.offset;
+            targetPosition.z = cameraTransform.position.z;
 
-            if (distanceToPlayer > config.followThreshold)
-            {
-                _targetPosition = desiredPosition;
-            }
-
-            float maxStep = config.lerpSpeed * SystemAPI.Time.DeltaTime;
-            float3 direction = _targetPosition - cameraPosition;
-            float distance = math.length(direction);
+            float3 newPosition = math.lerp(cameraTransform.position, targetPosition, config.lerpSpeed * SystemAPI.Time.DeltaTime);
+            cameraTransform.position = newPosition;
             
-            float3 newPosition = math.lerp(cameraPosition, _targetPosition, config.lerpSpeed * SystemAPI.Time.DeltaTime);
-            camera.position = newPosition;
-            
-            //float3 move = direction / distance * maxStep;
-            //camera.position = cameraPosition + move;
+            float targetSize = math.clamp(playerMass.Radius * config.zoomMultiplier, config.minZoom, config.maxZoom);
+            camera.orthographicSize = math.lerp(camera.orthographicSize, targetSize, config.zoomLerpSpeed * SystemAPI.Time.DeltaTime);
         }
     }
 }

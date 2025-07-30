@@ -28,7 +28,7 @@ namespace Features.Units.Food
         {
             if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
             {
-                transform.localScale = Vector3.one * initialRadius;
+                transform.localScale = initialRadius * 2f * Vector3.one;
             }
         }
 #endif
