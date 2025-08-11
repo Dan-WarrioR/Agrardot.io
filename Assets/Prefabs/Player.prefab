@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -1761434901924536951, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
+      propertyPath: isScalable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1761434901924536951, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
+      propertyPath: initialMass
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1984094340794852805, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
       propertyPath: m_LocalScale.x
       value: 8
@@ -72,6 +80,18 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 6b3f529c72e204349bc883b5e5333a84, type: 2}
+    - target: {fileID: 8268008045013615478, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268008045013615478, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
+      propertyPath: m_Color.g
+      value: 0.0956518
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268008045013615478, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -79,6 +99,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3544382936084663624, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
       insertIndex: -1
       addedObject: {fileID: -7882453887379023288}
+    - targetCorrespondingSourceObject: {fileID: 3544382936084663624, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 93393428094945805}
+    - targetCorrespondingSourceObject: {fileID: 3544382936084663624, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -362359046604754646}
+    - targetCorrespondingSourceObject: {fileID: 3544382936084663624, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1274042392595517051}
   m_SourcePrefab: {fileID: 100100000, guid: fd0d08060000c2f41a81dc061176e93a, type: 3}
 --- !u!1 &2408262165433040654 stripped
 GameObject:
@@ -99,3 +128,63 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 30
   isUser: 0
+--- !u!54 &93393428094945805
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408262165433040654}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 120
+  m_CollisionDetection: 1
+--- !u!65 &-362359046604754646
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408262165433040654}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1274042392595517051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408262165433040654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64c7103a89ac470c8f8003269cd5c2de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
