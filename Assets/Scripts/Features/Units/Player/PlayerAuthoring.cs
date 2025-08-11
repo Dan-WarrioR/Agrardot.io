@@ -13,10 +13,15 @@ namespace Features.Units.Player
     {
         
     }
+
+    public struct BotTag : IComponentData
+    {
+        
+    }
     
     public struct MovementComponent : IComponentData
     {
-        public float2 velocity;
+        public float3 velocity;
         public float baseSpeed;
         public float currentSpeed;
     }
@@ -25,7 +30,6 @@ namespace Features.Units.Player
     {
         [SerializeField]
         private float moveSpeed;
-
         [SerializeField]
         private bool isUser = false;
         
@@ -40,10 +44,13 @@ namespace Features.Units.Player
                 {
                     AddComponent<UserTag>(entity);
                 }
+                else
+                {
+                    AddComponent<BotTag>(entity);
+                }
                 
                 AddComponent(entity, new MovementComponent
                 {
-                    velocity = float2.zero,
                     baseSpeed = authoring.moveSpeed,
                     currentSpeed = authoring.moveSpeed,
                 });
