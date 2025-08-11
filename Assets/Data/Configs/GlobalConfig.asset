@@ -12,10 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b616589f8cd44ed9ad3127de9200107, type: 3}
   m_Name: GlobalConfig
   m_EditorClassIdentifier: 
-  randomSeed: 186
-  mapMin: {x: -500, y: -500}
-  mapMax: {x: 500, y: 500}
-  foodCount: 10000
-  playerCount: 100
-  foodRespawnDelay: 5
-  playerRespawnDelay: 5
+  globalConfig:
+    foodCount: 100
+    playerCount: 1
+  foodConfig:
+    minMass: 1
+    massToScale: 10
+  spawnConfig:
+    mapMin:
+      x: -50
+      y: 50
+    mapMax:
+      x: -50
+      y: 50
+    foodRespawnDelay: 1
+    playerRespawnDelay: 10

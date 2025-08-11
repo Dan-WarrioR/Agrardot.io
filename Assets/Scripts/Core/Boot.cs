@@ -5,6 +5,7 @@ using Data;
 using EditorAttributes;
 using Core.SceneManagement;
 using Tools;
+using Unity.Entities;
 using UnityEngine;
 
 namespace Core
@@ -25,7 +26,7 @@ namespace Core
         [SerializeField]
         private StartState startState;
         [SerializeField]
-        private GlobalConfig globalConfig;
+        private GlobalConfigs globalConfigs;
         
         private void Awake()
         {
@@ -40,7 +41,7 @@ namespace Core
                 return;
             }
                 
-            Dependency.Register(globalConfig);
+            globalConfigs.Register(World.DefaultGameObjectInjectionWorld);
             IsPreloaded = true;
             SceneLoader.LoadScene(coreScene, () =>
             {
