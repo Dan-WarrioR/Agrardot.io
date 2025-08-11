@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coreScene: Core
   startState: 2
-  globalConfig: {fileID: 11400000, guid: 8f60c4be855fd5f478044ef624cc4578, type: 2}
+  globalConfigs: {fileID: 11400000, guid: 8f60c4be855fd5f478044ef624cc4578, type: 2}
 --- !u!4 &360174416
 Transform:
   m_ObjectHideFlags: 0
