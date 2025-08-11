@@ -23,7 +23,7 @@ namespace Features.Units.Food
             var job = new RotateJob
             {
                 deltaTime = SystemAPI.Time.DeltaTime,
-                speed = RotationSpeed
+                speed = RotationSpeed,
             };
 
             job.Schedule();
@@ -38,7 +38,7 @@ namespace Features.Units.Food
         public float deltaTime;
         public float speed;
 
-        public void Execute(ref LocalTransform transform)
+        private void Execute(ref LocalTransform transform)
         {
             float angle = speed * deltaTime;
             transform = transform.RotateZ(angle);

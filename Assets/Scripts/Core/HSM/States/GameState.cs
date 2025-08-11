@@ -3,6 +3,7 @@ using EditorAttributes;
 using Features;
 using Features.Spawn;
 using Core.SceneManagement;
+using Data.Configs;
 using Tools;
 using Unity.Entities;
 
@@ -23,33 +24,39 @@ namespace Core.HSM.States
             DotsExtensions.SwitchSystem<GameplaySystemGroup>(true);                 
 
             SceneLoader.LoadScene(GameSceneName);
-            var globalConfig = Dependency.Get<GlobalConfig>();
-            SpawnEntities(globalConfig);
         }
 
         private void SpawnEntities(GlobalConfig globalConfig)
         {
-            SpawnEntity(new SpawnRequest
+            return;
+            DotsExtensions.CreateBufferRequest(new SpawnRequestComponent
             {
                 type = SpawnRequestType.Food,
-                count = globalConfig.foodCount,
+                count = 10,
             });
-            
-            if (globalConfig.playerCount <= 0)
-            {
-                return;
-            }
-            
-            SpawnEntity(new SpawnRequest
-            {
-                type = SpawnRequestType.Player,
-                count = globalConfig.playerCount - 1,
-            });
-            SpawnEntity(new SpawnRequest
+            DotsExtensions.CreateBufferRequest(new SpawnRequestComponent
             {
                 type = SpawnRequestType.User,
                 count = 1,
             });
+            
+            
+            //
+            // if (globalConfigs.playerCount <= 0)
+            // {
+            //     return;
+            // }
+            //
+            // SpawnEntity(new SpawnRequestComponent
+            // {
+            //     type = SpawnRequestType.Player,
+            //     count = globalConfigs.playerCount - 1,
+            // });
+            // SpawnEntity(new SpawnRequestComponent
+            // {
+            //     type = SpawnRequestType.User,
+            //     count = 1,
+            // });
         }
 
         private void SpawnEntity<T>(T request) where T : unmanaged, IComponentData

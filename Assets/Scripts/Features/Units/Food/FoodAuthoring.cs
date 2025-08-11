@@ -38,7 +38,6 @@ namespace Features.Units.Food
             public override void Bake(FoodAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                AddComponent<FoodTag>(entity);
                 AddComponent<MassChangedTag>(entity);
                 SetComponentEnabled<MassChangedTag>(entity, false);
                 AddComponent(entity, new FoodComponent
