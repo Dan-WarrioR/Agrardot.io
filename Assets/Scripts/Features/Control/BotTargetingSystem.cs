@@ -1,56 +1,100 @@
-﻿using Data;
-using Features.Gameplay;
-using Features.Units.Food;
+﻿using Features.Absorption;
 using Features.Units.Player;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Transforms;
 
 namespace Features.Control
 {
     [UpdateInGroup(typeof(GameplaySystemGroup))]
     public partial struct BotTargetingSystem : ISystem
     {
+        private EntityQuery _eatableQuery;
+        
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<GlobalConfigComponent>();
+            state.RequireForUpdate<EatableComponent>();
+            state.RequireForUpdate<EaterTag>();
+            state.RequireForUpdate<BotTag>();
+            
+            var builder = new EntityQueryBuilder(Allocator.Temp)
+                .WithAll<EatableComponent, LocalTransform>();
+            _eatableQuery = state.GetEntityQuery(builder);
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (botMass, botMovement) in SystemAPI
-                         .Query<MassAspect, RefRW<MovementComponent>>()
-                         .WithAll<PlayerTag>()
-                         .WithNone<UserTag>())
+            var eatableEntities = _eatableQuery.ToEntityArray(Allocator.TempJob);
+            var eatableTransforms = _eatableQuery.ToComponentDataArray<LocalTransform>(Allocator.TempJob);
+            var eatableComponents = _eatableQuery.ToComponentDataArray<EatableComponent>(Allocator.TempJob);
+
+            var job = new BotSeekJob
             {
-                float3 botPosition = botMass.Transform.Position;
-                float botMassValue = botMass.Mass;
+                eatableEntities = eatableEntities,
+                eatableTransforms = eatableTransforms,
+                eatableComponents = eatableComponents,
+            };
 
-                float minDistanceSq = float.MaxValue;
+            var jobHandle = job.ScheduleParallel(state.Dependency);
+            
+            jobHandle = eatableEntities.Dispose(jobHandle);
+            jobHandle = eatableTransforms.Dispose(jobHandle);
+            jobHandle = eatableComponents.Dispose(jobHandle);
+            
+            state.Dependency = jobHandle;
+        }
+        
+        [BurstCompile]
+        [WithAll(typeof(BotTag))]
+        private partial struct BotSeekJob : IJobEntity
+        {
+            [ReadOnly] 
+            public NativeArray<Entity> eatableEntities;
+            [ReadOnly] 
+            public NativeArray<LocalTransform> eatableTransforms;
+            [ReadOnly] 
+            public NativeArray<EatableComponent> eatableComponents;
+            
+            private void Execute(
+                Entity botEntity,
+                ref MovementComponent movement,
+                in LocalTransform botTransform,
+                in EatableComponent botEatable)
+            {
+                float3 botPos = botTransform.Position;
                 float2 bestDirection = float2.zero;
-
-                foreach (var foodMass in SystemAPI
-                             .Query<MassAspect>()
-                             .WithAll<FoodTag>())
+                float bestDistanceSq = float.MaxValue;
+                
+                for (int i = 0; i < eatableEntities.Length; i++)
                 {
-                    float foodMassValue = foodMass.Mass;
-                    if (foodMassValue >= botMassValue)
-                        continue;
-
-                    float3 foodPosition = foodMass.Transform.Position;
-                    float distanceSq = math.distancesq(botPosition, foodPosition);
-
-                    if (distanceSq < minDistanceSq)
+                    if (eatableEntities[i] == botEntity)
                     {
-                        minDistanceSq = distanceSq;
-                        float2 dir = foodPosition.xy - botPosition.xy;
-                        bestDirection = math.normalizesafe(dir);
+                        continue;
                     }
+
+                    if (eatableComponents[i].mass >= botEatable.mass)
+                    {
+                        continue;
+                    }
+
+                    float3 targetPos = eatableTransforms[i].Position;
+                    float2 direction = targetPos.xy - botPos.xy;
+                    float distanceSq = math.lengthsq(direction);
+
+                    if (!(distanceSq < bestDistanceSq))
+                    {
+                        continue;
+                    }
+
+                    bestDistanceSq = distanceSq;
+                    bestDirection = direction;
                 }
 
-                botMovement.ValueRW.velocity = bestDirection;
+                movement.velocity = new float3(math.normalizesafe(bestDirection), 0f);
             }
         }
     }
