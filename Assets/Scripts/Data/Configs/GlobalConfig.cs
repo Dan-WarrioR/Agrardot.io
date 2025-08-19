@@ -1,5 +1,6 @@
 ﻿using System;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Data.Configs
 {
@@ -7,6 +8,7 @@ namespace Data.Configs
     public struct GlobalConfig : IComponentData
     {
         public int foodCount;
+        [Min(2)]
         public int playerCount;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Data.Configs;
+using Features.Control;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -6,6 +7,9 @@ using Unity.Transforms;
 
 namespace Features.Absorption
 {
+    [UpdateInGroup(typeof(GameplaySystemGroup))]
+    [UpdateAfter(typeof(AbsorptionSystem))]
+    [BurstCompile]
     public partial struct UpdateScaleSystem : ISystem
     {
         [BurstCompile]
@@ -29,6 +33,7 @@ namespace Features.Absorption
             }
         }
         
+        [BurstCompile]
         public static float MassToRadius(float mass, float baseRadius)
         {
             return baseRadius * math.sqrt(mass / math.PI);

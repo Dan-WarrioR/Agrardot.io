@@ -26,46 +26,6 @@ namespace Core.HSM.States
             SceneLoader.LoadScene(GameSceneName);
         }
 
-        private void SpawnEntities(GlobalConfig globalConfig)
-        {
-            return;
-            DotsExtensions.CreateBufferRequest(new SpawnRequestComponent
-            {
-                type = SpawnRequestType.Food,
-                count = 10,
-            });
-            DotsExtensions.CreateBufferRequest(new SpawnRequestComponent
-            {
-                type = SpawnRequestType.User,
-                count = 1,
-            });
-            
-            
-            //
-            // if (globalConfigs.playerCount <= 0)
-            // {
-            //     return;
-            // }
-            //
-            // SpawnEntity(new SpawnRequestComponent
-            // {
-            //     type = SpawnRequestType.Player,
-            //     count = globalConfigs.playerCount - 1,
-            // });
-            // SpawnEntity(new SpawnRequestComponent
-            // {
-            //     type = SpawnRequestType.User,
-            //     count = 1,
-            // });
-        }
-
-        private void SpawnEntity<T>(T request) where T : unmanaged, IComponentData
-        {
-            var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            var entity = manager.CreateEntity();
-            manager.AddComponentData(entity, request);
-        }
-
         [Button]
         private void ToMenu()
         {

@@ -7,6 +7,8 @@ using Unity.Transforms;
 
 namespace Features.Absorption
 {
+    [UpdateInGroup(typeof(GameplaySystemGroup))]
+    [BurstCompile]
     public partial struct AbsorptionSystem : ISystem
     {
         private EntityQuery _eaterQuery;
@@ -53,6 +55,7 @@ namespace Features.Absorption
         }
     }
     
+    [BurstCompile]
     public partial struct AbsorptionJob : IJobEntity
     {
         [ReadOnly] public float baseRadius;

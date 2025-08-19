@@ -6,6 +6,8 @@ using Unity.Mathematics;
 
 namespace Features.Control
 {
+    [UpdateInGroup(typeof(GameplaySystemGroup))]
+    [BurstCompile]
     public partial struct PlayerControllerSystem : ISystem
     {
         [BurstCompile]
