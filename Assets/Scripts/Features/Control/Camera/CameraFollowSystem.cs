@@ -1,4 +1,5 @@
-﻿using Features.Gameplay;
+﻿using Features.Absorption;
+using Features.Units.Food;
 using Features.Units.Player;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -6,6 +7,7 @@ using Unity.Transforms;
 
 namespace Features.Control.Camera
 {
+    [UpdateInGroup(typeof(GameplaySystemGroup))]
     public partial class CameraFollowSystem : SystemBase
     {
         private float3 _targetPosition;
@@ -24,16 +26,13 @@ namespace Features.Control.Camera
             var playerEntity = SystemAPI.GetSingletonEntity<UserTag>();
 
             var playerTransform = SystemAPI.GetComponentRO<LocalToWorld>(playerEntity).ValueRO;
-            var playerMass = SystemAPI.GetAspect<MassAspect>(playerEntity);
+            var playerMass = SystemAPI.GetComponentRO<EatableComponent>(playerEntity);
 
             float3 targetPosition = playerTransform.Position + config.offset;
             targetPosition.z = cameraTransform.position.z;
 
             float3 newPosition = math.lerp(cameraTransform.position, targetPosition, config.lerpSpeed * SystemAPI.Time.DeltaTime);
             cameraTransform.position = newPosition;
-            
-            float targetSize = math.clamp(playerMass.Radius * config.zoomMultiplier, config.minZoom, config.maxZoom);
-            camera.orthographicSize = math.lerp(camera.orthographicSize, targetSize, config.zoomLerpSpeed * SystemAPI.Time.DeltaTime);
         }
     }
 }
