@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: GlobalConfig
   m_EditorClassIdentifier: 
   globalConfig:
-    foodCount: 100
-    playerCount: 1
+    foodCount: 1
+    playerCount: 2
   foodConfig:
     minMass: 1
     massToScale: 10
   spawnConfig:
     mapMin:
-      x: -50
-      y: 50
+      x: -200
+      y: -200
     mapMax:
-      x: -50
-      y: 50
+      x: 200
+      y: 200
     foodRespawnDelay: 1
     playerRespawnDelay: 10
